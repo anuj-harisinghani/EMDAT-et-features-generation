@@ -11,10 +11,12 @@ Institution: The University of British Columbia.
 # ####################### Eye tracker type and path ##############################################################
 
 # the folder that has the files exported from eye trackers
-EYELOGDATAFOLDER = "./sampledata"
+EYELOGDATAFOLDER = "/Users/obarral/Documents/CANARY/Data/PRE-LOCKDOWN-ALL-DATA"
+
+BASE_TOBII_NAME = "CanaryExperiment"
 
 # the folder that has the external log files
-EXTERNALLOGDATAFOLDER = "./sampledata/external logs"
+#EXTERNALLOGDATAFOLDER = "./sampledata/external logs"
 
 # the eye tracker and/or software used to collect and export the data
 #EYETRACKERTYPE = "TobiiV2" #Tobii Studio version 1x and 2x
@@ -94,27 +96,28 @@ featurelist.extend(['numsaccades', 'sumsaccadedistance', 'meansaccadedistance', 
 			   'fixationsaccadetimeratio'])
 
 # Events features to generate and export
-featurelist.extend(['numevents', 'numleftclic', 'numrightclic', 'numdoubleclic', 'numkeypressed', 'leftclicrate', 'rightclicrate', 'doubleclicrate', 'keypressedrate',
-               'timetofirstleftclic', 'timetofirstrightclic', 'timetofirstdoubleclic', 'timetofirstkeypressed'])
+#featurelist.extend(['numevents', 'numleftclic', 'numrightclic', 'numdoubleclic', 'numkeypressed', 'leftclicrate', 'rightclicrate', 'doubleclicrate', 'keypressedrate',
+#               'timetofirstleftclic', 'timetofirstrightclic', 'timetofirstdoubleclic', 'timetofirstkeypressed'])
 
 # Generate AOI-sequence
-aoisequencefeat = ['aoisequence']
+# featurelist.extend(['aoisequence'])
 
 # AOI features to generate and export
 aoigeneralfeat = ['fixationrate','numfixations','totaltimespent','proportionnum',
-                  'proportiontime','longestfixation', 'meanfixationduration', 'stddevfixationduration', 'timetofirstfixation','timetolastfixation',
-				  'numevents', 'numleftclic', 'numrightclic', 'numdoubleclic', 'leftclicrate', 'rightclicrate', 'doubleclicrate',
-                  'timetofirstleftclic', 'timetofirstrightclic', 'timetofirstdoubleclic', 'timetolastleftclic', 'timetolastrightclic', 'timetolastdoubleclic']
+                  'proportiontime','longestfixation', 'meanfixationduration', 'stddevfixationduration', 'timetofirstfixation','timetolastfixation']
+#				  'numevents', 'numleftclic', 'numrightclic', 'numdoubleclic', 'leftclicrate', 'rightclicrate', 'doubleclicrate',
+#                  'timetofirstleftclic', 'timetofirstrightclic', 'timetofirstdoubleclic', 'timetolastleftclic', 'timetolastrightclic', 'timetolastdoubleclic']
 
 # Pupil features to generate and export
 aoigeneralfeat.extend(['meanpupilsize', 'stddevpupilsize', 'maxpupilsize', 'minpupilsize', 'startpupilsize','endpupilsize',
                'meanpupilvelocity', 'stddevpupilvelocity', 'maxpupilvelocity', 'minpupilvelocity'])
 
-# Head distance for AIO features to generate and export
+# Head distance for AOI features to generate and export
 aoigeneralfeat.extend(['meandistance', 'stddevdistance', 'maxdistance', 'mindistance', 'startdistance', 'enddistance'])
 
 #list of the AOI names
-aoinames = ['Top','Bottom','Graph','Toolbar']
+aoinames = ['upperHalf','lowerHalf','leftHalf','rightHalf','upperLeftQuadrant','upperRightQuadrant','lowerLeftQuadrant','lowerRightQuadrant','cookie','girl','boy','woman','jar','stool','plate','dishcloth','water','window','curtain','dishes','sink']
+# aoinames = ['upperHalf','lowerHalf','leftHalf','rightHalf','upperLeftQuadrant','upperRightQuadrant','lowerLeftQuadrant','lowerRightQuadrant','cookie','girl','boy','woman','jar','stool','plate','dishcloth','water','window','cupboard','curtain','dishes','sink']
 
 #list of transition-based AOI features (count)
 aoitransfrom = map(lambda x:'numtransfrom_'+x, aoinames)
@@ -151,7 +154,7 @@ was looking at that same point during that period.
 VALIDITY_METHOD = 3
 
 # Validity Threshold for segments (the minimum proportion of valid samples for a Segment or Scene to be considered valid)
-VALID_PROP_THRESH = 0.8
+VALID_PROP_THRESH = 0.7
 
 #the maximum gap size (ms) allowable in samples for a Segment or Scene to be considered valid
 VALID_TIME_THRESH = 3000
@@ -169,7 +172,7 @@ MAX_SEG_TIMEGAP = 10
 
 
 #proportion of valid gaze samples required per saccade. If less than 1, missing gaze sample will be extrapolated.
-VALID_SAMPLES_PROP_SACCADE = 1
+VALID_SAMPLES_PROP_SACCADE = .9
 
 #minimum segment size in ms that is considered meaningful for this experiment
 MINSEGSIZE = 0
@@ -180,17 +183,21 @@ INCLUDE_HALF_FIXATIONS = False
 
 #Pupil adjustment to minimize the pupil size differences among individual users, if Rest Pupil Size (RPS) is provided. Possible values:
 #PUPIL_ADJUSTMENT = None 		#no adjustment;
-PUPIL_ADJUSTMENT = "rpscenter"	#Rps-centering (substraction of the rps from the raw pupil size)
-#PUPIL_ADJUSTMENT = "PCPS" 		#Normalization of pupil size based on the rsp following [Iqbal et al., 2005, doi>10.1145/1054972.1055016]
+#PUPIL_ADJUSTMENT = "rpscenter"	#Rps-centering (substraction of the rps from the raw pupil size)
+PUPIL_ADJUSTMENT = "PCPS" 		#Normalization of pupil size based on the rsp following [Iqbal et al., 2005, doi>10.1145/1054972.1055016]
+#The file where the pupil baselines are for PCPS method
+RPSFILE = EYELOGDATAFOLDER + '/Preprocessing/PupilBaselines/all_rest_pupil_sizes.tsv'
 
 
 # ####################### Verbose/Debug mode ##############################################################
 
 #Enable/disable debug mode. In debug mode warnings are treated as errors, and the verbosity level is automatically set to "VERBOSE" (see below)
 #DEBUG = True
-DEBUG = True
+DEBUG = False
 
 #Verbosity level
 #VERBOSE = "QUIET"		#prints nothing except errors and warnings
-VERBOSE = "NORMAL"		#prints essential information
-#VERBOSE = "VERBOSE"	#prints information useful for debugging
+#VERBOSE = "NORMAL"		#prints essential information
+VERBOSE = "VERBOSE"	#prints information useful for debugging
+
+CANARY_OUTPUT_LOG = '/Users/obarral/Documents/CANARY/Data/PRE-LOCKDOWN-ALL-DATA/EMDAT/EMDAT_processing_log.txt'

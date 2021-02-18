@@ -348,20 +348,22 @@ def read_rest_pupil_sizes(rpsfile):
         a dictionary of rest pupil sizes. None otherwise
 
     """
+    
+    
     if rpsfile != None:
         with open(rpsfile, 'r') as f:
             lines = f.readlines()
         rpsdic = {}
         import re
-        scenelist = re.findall('\w+', lines[0])
+        scenelist = lines[0][:-1].split('\t')
         for line in lines[1:]:
-            linelist = re.findall('\w+', line)
+            linelist = line[:-1].split('\t')
             pid = cast_int(linelist[0])
             if pid == None: #if casting didn't work
                 pid = linelist[0]
             rpsdic[pid] = {}
             for scene, rpsvalue in zip(scenelist[1:], linelist[1:]):
-                rpsdic[pid][scene] = cast_int(rpsvalue)
+                rpsdic[pid][scene] = cast_float(rpsvalue)
 
         return rpsdic
     else:

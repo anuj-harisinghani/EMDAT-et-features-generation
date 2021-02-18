@@ -195,7 +195,7 @@ def cast_float(string, invalid_value=None):
         the float value of the string given or None if not a float
     """
     try:
-        string_as_float = float(string)
+        string_as_float = float(string.replace(',','.'))
         if string_as_float == invalid_value:
             return None
     except ValueError:
@@ -234,3 +234,9 @@ def list_to_string(list, separator = "\t"):
 
     """
     return separator.join(map(str, list))+ "\n"
+
+def log_to_file(STR):
+    outF = open(params.CANARY_OUTPUT_LOG, "a")
+    outF.write(STR)
+    outF.close()
+    

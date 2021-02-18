@@ -206,8 +206,8 @@ class Event:
 
         if self.event == "LeftMouseClick" or self.event == "RightMouseClick":
             (media_offset_x, media_offset_y) = media_offset
-            self.x_coord -= media_offset_x
-            self.y_coord -= media_offset_y
+#            self.x_coord -= media_offset_x
+#            self.y_coord -= media_offset_y
             self.data1 = self.x_coord
             self.data2 = self.y_coord
         elif self.event == "KeyPress":

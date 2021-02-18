@@ -15,6 +15,8 @@ import EMDAT_core
 from EMDAT_core.data_structures import *
 from EMDAT_core.Scene import Scene
 from EMDAT_core.Recording import *
+from EMDAT_core.utils import log_to_file
+
 
 
 class Participant():
@@ -315,9 +317,9 @@ def export_features_all(participants, featurelist = None, aoifeaturelist = None,
     featnames = []
     if participants:
         for p in participants:
-            if not(p.is_valid()) and require_valid:
-                warn( "User " + str(p.pid) + " was not valid." )
-                continue
+#            if not(p.is_valid()) and require_valid:
+#                warn( "User " + str(p.pid) + " was not valid." )
+#                continue
             fnames, fvals = p.export_features(featurelist=featurelist, aoifeaturelist=aoifeaturelist,
                                               aoifeaturelabels = aoifeaturelabels,
                                               id_prefix=id_prefix, require_valid = require_valid)
@@ -358,12 +360,20 @@ def write_features_tsv(participants, outfile, featurelist = None, aoifeaturelist
     fnames, fvals = export_features_all(participants, featurelist =  featurelist,
                                         aoifeaturelabels = aoifeaturelabels,
                                         aoifeaturelist = aoifeaturelist, id_prefix=id_prefix)
-
+    part_orig = set()
+    [part_orig.add(p.pid) for p in participants]
+    part_remaining = set()
     with open(outfile, 'w') as f:
         f.write(string.join(fnames, '\t') + '\n')
         for l in fvals:
             f.write(string.join(map(str, l), '\t') + '\n')
-
+            part_remaining.add(l[0])
+    
+    part_lost = part_orig.symmetric_difference(part_remaining)
+    for p in part_lost:
+        log_to_file("Participant "+p+" removed as it had not enough valid samples for any of the tasks!\n")
+    log_to_file("Total number of participants removed due to not enough valid samples for any task: " + str(len(part_orig)-len(part_remaining)) + "\n")
+    log_to_file("EMDAT was able to generate features for " + str(len(part_remaining)) + " participants\n")
 
 def partition(segfile):
     """Generates the scenelist based on a .seg file

@@ -30,7 +30,7 @@ class BasicParticipant(Participant):
     def __init__(self, pid, eventfile, datafile, fixfile, saccfile, segfile,
                  log_time_offset=None, aoifile=None, prune_length=None,
                  require_valid_segs=True, auto_partition_low_quality_segments=False,
-                 rpsdata=None, export_pupilinfo=False):
+                 rpsdata=None, export_pupilinfo=True):
         """Inits BasicParticipant class
         Args:
             pid: Participant id
@@ -120,7 +120,7 @@ class BasicParticipant(Participant):
         if self.numofsegments == 0:
             raise Exception("No segments found.")
 
-        # In Recording.py: Read the list of AIOs for this experiment from aoifile
+        # In Recording.py: Read the list of AOIs for this experiment from aoifile
         if aoifile is not None:
             aois = read_aois(aoifile)
         else:
@@ -218,11 +218,12 @@ def read_participants_Basic(datadir, user_list, pids, prune_length=None, aoifile
             sacfile = None
             segfile = datadir+'/P'+str(rec)+'.seg'
         elif params.EYETRACKERTYPE == "TobiiV3":
-            allfile = "{dir}/P{rec}_Data_Export.tsv".format(dir=datadir, rec=rec)
-            fixfile = "{dir}/P{rec}_Data_Export.tsv".format(dir=datadir, rec=rec)
-            sacfile = "{dir}/P{rec}_Data_Export.tsv".format(dir=datadir, rec=rec)
-            evefile = "{dir}/P{rec}_Data_Export.tsv".format(dir=datadir, rec=rec)
-            segfile = "{dir}/TobiiV3_sample_{rec}.seg".format(dir=datadir, rec=rec)
+            allfile = "{dir}/Preprocessing/Eye_Raw/{tobii_name}_{rec}.tsv".format(dir=datadir, tobii_name=params.BASE_TOBII_NAME,rec=rec)
+            fixfile = "{dir}/Preprocessing/Eye_Raw/{tobii_name}_{rec}.tsv".format(dir=datadir, tobii_name=params.BASE_TOBII_NAME,rec=rec)
+            sacfile = "{dir}/Preprocessing/Eye_Raw/{tobii_name}_{rec}.tsv".format(dir=datadir, tobii_name=params.BASE_TOBII_NAME,rec=rec)
+            evefile = "{dir}/Preprocessing/Eye_Raw/{tobii_name}_{rec}.tsv".format(dir=datadir, tobii_name=params.BASE_TOBII_NAME,rec=rec)
+            segfile = "{dir}/Preprocessing/Segments/{tobii_name}_{rec}.seg".format(dir=datadir, tobii_name=params.BASE_TOBII_NAME,rec=rec)
+            aoifile = "{dir}/Preprocessing/AOIs/{tobii_name}_{rec}.aoi".format(dir=datadir, tobii_name=params.BASE_TOBII_NAME,rec=rec)
             #segfile = "{dir}/TobiiV3_sample_{rec}.segs".format(dir=datadir, rec=rec)
         elif params.EYETRACKERTYPE == "SMI":
             allfile = "{dir}/SMI_Sample_{rec}_Samples.txt".format(dir=datadir, rec=rec)
@@ -234,8 +235,11 @@ def read_participants_Basic(datadir, user_list, pids, prune_length=None, aoifile
         if os.path.exists(allfile):
             p = BasicParticipant(rec, evefile, allfile, fixfile, sacfile, segfile, log_time_offset=offset,
                                  aoifile=aoifile, prune_length=prune_length, require_valid_segs=require_valid_segs,
-                                 auto_partition_low_quality_segments=auto_partition_low_quality_segments, rpsdata=currpsdata)
+                                 auto_partition_low_quality_segments=auto_partition_low_quality_segments, 
+                                 rpsdata=currpsdata,export_pupilinfo=True)
             participants.append(p)
         else:
+            log_to_file("Error reading participant files for: "+str(pid)+" FILE NOT FOUND\n")
+            
             warn("Error reading participant files for: "+str(pid))
     return participants

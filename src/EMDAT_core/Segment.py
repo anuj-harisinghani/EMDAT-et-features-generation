@@ -86,6 +86,7 @@ class Segment():
         #self.saccade_data = saccade_data
         #self.event_data = event_data
         self.features = {}
+        self.pupilinfo_for_export = {}
 
         """ If prune_length specified, keep only data from start to start + prune_length
             of the segment
@@ -363,6 +364,8 @@ class Segment():
                 self.features['stddevpupilvelocity'] = stddev(valid_pupil_velocity)
                 self.features['maxpupilvelocity']    = max(valid_pupil_velocity)
                 self.features['minpupilvelocity']    = min(valid_pupil_velocity)
+        else:
+            warn("No valid pupil data!!")
 
     def calc_distance_features(self, all_data):
         """ Calculates distance features such as
