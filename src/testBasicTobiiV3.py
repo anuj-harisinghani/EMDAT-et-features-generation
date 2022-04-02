@@ -13,29 +13,29 @@ from EMDAT_core.Participant import export_features_all, write_features_tsv
 from EMDAT_core.ValidityProcessing import output_Validity_info_Segments, output_percent_discarded, output_Validity_info_Participants
 from EMDAT_core.utils import log_to_file
 
-
+import os
 import csv
 #reset output log
-open(params.CANARY_OUTPUT_LOG, 'w').close()
-
-# extract user list from the pupilbaseline file
-ul = []
-with open(params.RPSFILE) as tsvfile:
-    tsvreader = csv.reader(tsvfile, delimiter="\t")
-    next(tsvreader, None)  # skip the headers
-    for line in tsvreader:
-        ul.append(line[0])
-
-log_to_file("Total number of participants read from pupil_baseline file: " + str(len(ul)) + "\n")
-
-#remove participants that EMDAT complains have no samples
-p_no_samples =['EL-114', 'EO-028','HI-045','EA-046','ET-171']
-
-for p in p_no_samples:
-    ul.remove(p)
-    log_to_file("Participant "+p+" removed as it had no samples!\n")
-
-log_to_file("Total number of participants removed due to lack of samples: " + str(len(p_no_samples)) + "\n")
+# open(params.CANARY_OUTPUT_LOG, 'w').close()
+#
+# # extract user list from the pupilbaseline file
+# ul = []
+# with open(params.RPSFILE) as tsvfile:
+#     tsvreader = csv.reader(tsvfile, delimiter="\t")
+#     next(tsvreader, None)  # skip the headers
+#     for line in tsvreader:
+#         ul.append(line[0])
+#
+# log_to_file("Total number of participants read from pupil_baseline file: " + str(len(ul)) + "\n")
+#
+# #remove participants that EMDAT complains have no samples
+# p_no_samples = ['EL-114', 'EO-028', 'HI-045', 'EA-046', 'ET-171']
+#
+# for p in p_no_samples:
+#     ul.remove(p)
+#     log_to_file("Participant "+p+" removed as it had no samples!\n")
+#
+# log_to_file("Total number of participants removed due to lack of samples: " + str(len(p_no_samples)) + "\n")
 
 
 #ul = [7, 19, 26, 36, 38, 52, 57]
@@ -46,17 +46,23 @@ log_to_file("Total number of participants removed due to lack of samples: " + st
 
 
 # user ids
+data_path = os.path.join('data', 'TobiiV3')
+uids = ul = os.listdir(r"C:\Users\Anuj\Desktop\Canary\Baseline\predicted_coordinates\pixel")
 uids = ul
 # time offsets from start of the recording
 #alogoffset = [0, 0, 0]
 
 # Read participants
-ps = read_participants_Basic(user_list = ul, pids = uids, datadir = params.EYELOGDATAFOLDER,
-                             prune_length = None,
-                             aoifile = None,
-                             require_valid_segs = False,
-                             auto_partition_low_quality_segments = False,
-                             rpsfile = params.RPSFILE )
+ps = read_participants_Basic(user_list=ul, pids=uids, datadir=params.EYELOGDATAFOLDER,
+                             prune_length=None,
+                             aoifile=None,
+                             require_valid_segs=True,
+                             auto_partition_low_quality_segments=False,
+                             rpsfile=None)
+
+output_path = os.path.join(r"C:\Users\Anuj\PycharmProjects\EMDAT-et-features-generation\src\outputfolder", 'output_featuresV3_2.tsv')
+write_features_tsv(ps, output_path, featurelist=params.featurelist,
+                   aoifeaturelabels=params.aoifeaturelist, id_prefix=True)
 
 #if params.DEBUG or params.VERBOSE == "VERBOSE":
 #    # explore_validation_threshold_segments(ps, auto_partition_low_quality_segments = False)

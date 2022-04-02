@@ -18,14 +18,14 @@ from EMDAT_core.Recording import *
 from EMDAT_core.utils import log_to_file
 
 
-
 class Participant():
     """
     A class that holds the information for one Participant in the experiment
     """
 
-    def __init__(self, pid, eventfile, datafile, fixfile, segfile, saccfile, log_time_offset = None, aoifile = None, prune_length= None,
-                 require_valid_segs = True, auto_partition_low_quality_segments = False, rpsdata = None):
+    def __init__(self, pid, eventfile, datafile, fixfile, segfile, saccfile, log_time_offset=None, aoifile=None,
+                 prune_length=None,
+                 require_valid_segs=True, auto_partition_low_quality_segments=False, rpsdata=None):
         """Inits BasicParticipant class
         Args:
             pid: Participant id
@@ -67,8 +67,7 @@ class Participant():
         self.pid = pid
         self.require_valid_segments = require_valid_segs
 
-
-    def is_valid(self, method = None, threshold=None, ):
+    def is_valid(self, method=None, threshold=None, ):
         """Determines if the samples for this Participant meets the validity threshold
 
         Args:
@@ -106,9 +105,8 @@ class Participant():
         """
         return map(lambda y: y.segid, filter(lambda x: x.is_valid, self.segments))
 
-
-    def export_features(self, featurelist=None, aoifeaturelist=None, aoifeaturelabels = None,
-                        id_prefix = True, require_valid = True):
+    def export_features(self, featurelist=None, aoifeaturelist=None, aoifeaturelabels=None,
+                        id_prefix=True, require_valid=True):
         """Returns feature names and their values for this Participant
 
         Args:
@@ -142,15 +140,15 @@ class Participant():
         first = True
         for sc in self.scenes:
             if not sc.is_valid and require_valid:
-                warn( "User %s:Scene %s dropped because of 'require_valid'" %(self.pid,sc.scid) )
+                warn("User %s:Scene %s dropped because of 'require_valid'" % (self.pid, sc.scid))
                 continue
             sc_feats = []
             if id_prefix:
                 sc_feats.append(self.pid)
             sc_feats.append(sc.scid)
-            fnames, fvals = sc.get_features(featurelist = featurelist,
-                                           aoifeaturelist = aoifeaturelist,
-                                           aoifeaturelabels = aoifeaturelabels)
+            fnames, fvals = sc.get_features(featurelist=featurelist,
+                                            aoifeaturelist=aoifeaturelist,
+                                            aoifeaturelabels=aoifeaturelabels)
             if first: featnames += fnames
             sc_feats += fvals
             first = False
@@ -158,8 +156,8 @@ class Participant():
 
         return featnames, data
 
-    def export_features_tsv(self, featurelist=None, aoifeaturelist=None, id_prefix = False,
-                            require_valid = True):
+    def export_features_tsv(self, featurelist=None, aoifeaturelist=None, id_prefix=False,
+                            require_valid=True):
         """Returns feature names and their values for this Participant in a tab separated format
 
         Args:
@@ -182,8 +180,8 @@ class Participant():
             fixationrate    length    meanabspathangles
             0.00268522882294    1529851    1.60354714212
         """
-        featnames, data  = self.export_features(featurelist, aoifeaturelist = aoifeaturelist,
-                                                id_prefix = id_prefix, require_valid = require_valid)
+        featnames, data = self.export_features(featurelist, aoifeaturelist=aoifeaturelist,
+                                               id_prefix=id_prefix, require_valid=require_valid)
 
         ret = string.join(featnames, '\t') + '\n'
         for t in data:
@@ -193,24 +191,25 @@ class Participant():
     def print_(self):
         """Outputs all feature names and their values for this Participant to the console
         """
-        def format_list(list,leng=None):
+
+        def format_list(list, leng=None):
             """
             """
-            out=''
+            out = ''
             if leng == None:
-                maxlen=0
+                maxlen = 0
                 for j in list:
                     st = repr(j)
                     if len(st) > maxlen:
                         maxlen = len(st)
                 for j in list:
-                    out+= repr(j).rjust(maxlen+1)
-                return out,maxlen+1
+                    out += repr(j).rjust(maxlen + 1)
+                return out, maxlen + 1
             else:
                 for j in list:
                     st = repr(j)
-                    out+= st.rjust(leng)
-                return out,leng
+                    out += st.rjust(leng)
+                return out, leng
 
         print("PID:", self.pid)
 
@@ -224,9 +223,9 @@ class Participant():
             fnames, fvals = seg.get_features()
             featnames += fnames
             seg_feats += fvals
-            o,l= format_list(featnames)
+            o, l = format_list(featnames)
             print(o)
-            print(format_list(seg_feats,l))
+            print(format_list(seg_feats, l))
 
         for sc in self.scenes:
             featnames = []
@@ -238,45 +237,47 @@ class Participant():
             fnames, fvals = sc.get_features()
             featnames += fnames
             sc_feats += fvals
-            o,l= format_list(featnames)
+            o, l = format_list(featnames)
             print(o)
-            print(format_list(sc_feats,l))
-
+            print(format_list(sc_feats, l))
 
     def write_raw_data(self, filename_all, filename_fix, filename_sac, filename_ev):
         f_all = open(filename_all, 'wb')
         f_fix = open(filename_fix, 'wb')
         f_sac = open(filename_sac, 'wb')
         f_ev = open(filename_ev, 'wb')
-        sep='\t'
-        f_all.write("scene"+sep+"timestamp"+sep+"rawpupilsize"+sep+"pupilvelocity"+sep+"headdistance"+sep+"is_valid"+sep+"stimuliname"+sep+
-		"fixationindex"+"\n")
+        sep = '\t'
+        f_all.write(
+            "scene" + sep + "timestamp" + sep + "rawpupilsize" + sep + "pupilvelocity" + sep + "headdistance" + sep + "is_valid" + sep + "stimuliname" + sep +
+            "fixationindex" + "\n")
 
-        f_fix.write("scene"+sep+"fixationindex"+sep+"timestamp"+sep+"fixationduration"+sep+"mappedfixationpointx"+sep+"mappedfixationpointy"+"\n")
+        f_fix.write(
+            "scene" + sep + "fixationindex" + sep + "timestamp" + sep + "fixationduration" + sep + "mappedfixationpointx" + sep + "mappedfixationpointy" + "\n")
 
-        f_sac.write("scene"+sep+"saccadeindex"+sep+"timestamp"+sep+"saccadeduration"+sep+"saccadedistance"+sep+"saccadespeed"+sep+"saccadeacceleration"+sep+
-		"saccadestartpointx"+sep+"saccadestartpointy"+sep+"saccadeendpointx"+sep+"saccadeendpointy"+sep+"saccadequality"+"\n")
+        f_sac.write(
+            "scene" + sep + "saccadeindex" + sep + "timestamp" + sep + "saccadeduration" + sep + "saccadedistance" + sep + "saccadespeed" + sep + "saccadeacceleration" + sep +
+            "saccadestartpointx" + sep + "saccadestartpointy" + sep + "saccadeendpointx" + sep + "saccadeendpointy" + sep + "saccadequality" + "\n")
 
-        f_ev.write("scene"+sep+"timestamp"+sep+"event"+sep+"event_key"+sep+"x_coord"+sep+"y_coord"+sep+"key_code"+sep+"key_name"+sep+"description"+sep+"\n")
-
+        f_ev.write(
+            "scene" + sep + "timestamp" + sep + "event" + sep + "event_key" + sep + "x_coord" + sep + "y_coord" + sep + "key_code" + sep + "key_name" + sep + "description" + sep + "\n")
 
         for sc in self.scenes:
             for sg in sc.segments:
 
                 for ad in sg.all_data:
-                    f_all.write(str(sc.scid)+str(sg.segid)+sep+ad.get_string()+'\n')
+                    f_all.write(str(sc.scid) + str(sg.segid) + sep + ad.get_string() + '\n')
                 for af in sg.fixation_data:
-                    f_fix.write(str(sc.scid)+str(sg.segid)+sep+af.get_string()+'\n')
+                    f_fix.write(str(sc.scid) + str(sg.segid) + sep + af.get_string() + '\n')
                 for asa in sg.saccade_data:
-                    f_sac.write(str(sc.scid)+str(sg.segid)+sep+asa.get_string()+'\n')
+                    f_sac.write(str(sc.scid) + str(sg.segid) + sep + asa.get_string() + '\n')
                 for ae in sg.event_data:
-                    f_ev.write(str(sc.scid)+str(sg.segid)+sep+ae.get_string()+'\n')
+                    f_ev.write(str(sc.scid) + str(sg.segid) + sep + ae.get_string() + '\n')
 
         f_all.close()
         f_fix.close()
 
 
-def read_participants(segsdir, datadir, prune_length = None, aoifile = None):
+def read_participants(segsdir, datadir, prune_length=None, aoifile=None):
     """Placeholder for a method that generates Participant objects for each participant
     in the experiment
     """
@@ -285,8 +286,8 @@ def read_participants(segsdir, datadir, prune_length = None, aoifile = None):
     return participants
 
 
-def export_features_all(participants, featurelist = None, aoifeaturelist = None, aoifeaturelabels=None,
-                         id_prefix = True, require_valid = True):
+def export_features_all(participants, featurelist=None, aoifeaturelist=None, aoifeaturelabels=None,
+                        id_prefix=True, require_valid=True):
     """Returns feature names and their values for a list of "Participant"s
 
     Args:
@@ -317,12 +318,12 @@ def export_features_all(participants, featurelist = None, aoifeaturelist = None,
     featnames = []
     if participants:
         for p in participants:
-#            if not(p.is_valid()) and require_valid:
-#                warn( "User " + str(p.pid) + " was not valid." )
-#                continue
+            #            if not(p.is_valid()) and require_valid:
+            #                warn( "User " + str(p.pid) + " was not valid." )
+            #                continue
             fnames, fvals = p.export_features(featurelist=featurelist, aoifeaturelist=aoifeaturelist,
-                                              aoifeaturelabels = aoifeaturelabels,
-                                              id_prefix=id_prefix, require_valid = require_valid)
+                                              aoifeaturelabels=aoifeaturelabels,
+                                              id_prefix=id_prefix, require_valid=require_valid)
             featnames = fnames
             data += fvals
     else:
@@ -331,8 +332,8 @@ def export_features_all(participants, featurelist = None, aoifeaturelist = None,
     return featnames, data
 
 
-def write_features_tsv(participants, outfile, featurelist = None, aoifeaturelist =  None,
-                       aoifeaturelabels=None, id_prefix = True):
+def write_features_tsv(participants, outfile, featurelist=None, aoifeaturelist=None,
+                       aoifeaturelabels=None, id_prefix=True):
     """Returns feature names and their values for a list of "Participant"s in a tsv-format file
 
     This method writes to a multi-line tab separated values (tsv) file with the first
@@ -357,9 +358,9 @@ def write_features_tsv(participants, outfile, featurelist = None, aoifeaturelist
         require_valid: a boolean determining if only valid segments should be used when
         calculating the features. default = True
     """
-    fnames, fvals = export_features_all(participants, featurelist =  featurelist,
-                                        aoifeaturelabels = aoifeaturelabels,
-                                        aoifeaturelist = aoifeaturelist, id_prefix=id_prefix)
+    fnames, fvals = export_features_all(participants, featurelist=featurelist,
+                                        aoifeaturelabels=aoifeaturelabels,
+                                        aoifeaturelist=aoifeaturelist, id_prefix=id_prefix)
     part_orig = set()
     [part_orig.add(p.pid) for p in participants]
     part_remaining = set()
@@ -368,12 +369,14 @@ def write_features_tsv(participants, outfile, featurelist = None, aoifeaturelist
         for l in fvals:
             f.write(string.join(map(str, l), '\t') + '\n')
             part_remaining.add(l[0])
-    
+
     part_lost = part_orig.symmetric_difference(part_remaining)
     for p in part_lost:
-        log_to_file("Participant "+p+" removed as it had not enough valid samples for any of the tasks!\n")
-    log_to_file("Total number of participants removed due to not enough valid samples for any task: " + str(len(part_orig)-len(part_remaining)) + "\n")
+        log_to_file("Participant " + p + " removed as it had not enough valid samples for any of the tasks!\n")
+    log_to_file("Total number of participants removed due to not enough valid samples for any task: " + str(
+        len(part_orig) - len(part_remaining)) + "\n")
     log_to_file("EMDAT was able to generate features for " + str(len(part_remaining)) + " participants\n")
+
 
 def partition(segfile):
     """Generates the scenelist based on a .seg file
@@ -413,7 +416,7 @@ def read_events(evfile):
     with open(evfile, 'r') as f:
         lines = f.readlines()
 
-    return map(Event, lines[(params.EVENTSHEADERLINES+params.NUMBEROFEXTRAHEADERLINES):])
+    return map(Event, lines[(params.EVENTSHEADERLINES + params.NUMBEROFEXTRAHEADERLINES):])
 
 
 def plot_pupil_dilation_all(participants, outdir, scene):
@@ -432,16 +435,17 @@ def plot_pupil_dilation_all(participants, outdir, scene):
     """
     lines = []
     for participant in participants:
-        lines = export_pupil_dilation_from_scene(participant, scene, separator = "\t")
+        lines = export_pupil_dilation_from_scene(participant, scene, separator="\t")
         with open(outdir + "pupildata" + "_" + str(participant.pid) + "_" + str(scene) + ".tsv", "w") as fout:
             if lines is not None:
                 for line in lines:
                     fout.write(line)
             else:
-                fout.write("There is no scene " + str(scene) + " in the participant " + str(participant.pid) + " record ")
+                fout.write(
+                    "There is no scene " + str(scene) + " in the participant " + str(participant.pid) + " record ")
 
 
-def export_pupil_dilation_from_scene(participant, scene, separator = "\t"):
+def export_pupil_dilation_from_scene(participant, scene, separator="\t"):
     """
     Exports pupil dilation information from  pupilinfo_for_export for a scene of a participant
 

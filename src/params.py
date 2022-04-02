@@ -11,7 +11,7 @@ Institution: The University of British Columbia.
 # ####################### Eye tracker type and path ##############################################################
 
 # the folder that has the files exported from eye trackers
-EYELOGDATAFOLDER = "/Users/obarral/Documents/CANARY/Data/PRE-LOCKDOWN-ALL-DATA"
+EYELOGDATAFOLDER = r"C:\Users\Anuj\PycharmProjects\EMDAT-et-features-generation\src\data\TobiiV3"
 
 BASE_TOBII_NAME = "CanaryExperiment"
 
@@ -19,7 +19,7 @@ BASE_TOBII_NAME = "CanaryExperiment"
 #EXTERNALLOGDATAFOLDER = "./sampledata/external logs"
 
 # the eye tracker and/or software used to collect and export the data
-#EYETRACKERTYPE = "TobiiV2" #Tobii Studio version 1x and 2x
+# EYETRACKERTYPE = "TobiiV2" #Tobii Studio version 1x and 2x
 EYETRACKERTYPE = "TobiiV3" #Tobii Studio version 3x
 #EYETRACKERTYPE = "SMI" # SMI/BeGaze
 
@@ -34,7 +34,7 @@ NUMBEROFEXTRAHEADERLINES = 8
 FIXATIONHEADERLINES = 19
 
 # number of lines at the beginning of the 'All-Data' files exported from Tobii before the actual data
-ALLDATAHEADERLINES = 26
+ALLDATAHEADERLINES = 0
 
 # number of lines at the beginning of the 'Event-Data' files exported from Tobii before the actual data
 EVENTSHEADERLINES = 27
@@ -47,7 +47,7 @@ ACTIONHEADERLINES = 0
 EVENTS_FIRST_DATA_LINE = 22
 
 # the line number of the row that contains the table header for fixations
-FIXATION_HEADER_LINE = 11
+FIXATION_HEADER_LINE = 0
 
 # the line number of the row that contains the table header for fixations
 SACCADE_HEADER_LINE = 14
@@ -200,4 +200,4 @@ DEBUG = False
 #VERBOSE = "NORMAL"		#prints essential information
 VERBOSE = "VERBOSE"	#prints information useful for debugging
 
-CANARY_OUTPUT_LOG = '/Users/obarral/Documents/CANARY/Data/PRE-LOCKDOWN-ALL-DATA/EMDAT/EMDAT_processing_log.txt'
+CANARY_OUTPUT_LOG = r"C:\Users\Anuj\PycharmProjects\EMDAT-et-features-generation\src\data\EMDAT_processing_log.txt"

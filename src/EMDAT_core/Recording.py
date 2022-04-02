@@ -191,12 +191,12 @@ class Recording:
             segs.extend(sc.segments)
         return segs, scenes
 
-
     def clean_memory(self):
         self.all_data = []
         self.fix_data = []
         self.sac_data = []
         self.event_data = []
+
 
 def read_segs(segfile):
     """Returns a dict with scid as the key and segments as value from a '.seg' file.

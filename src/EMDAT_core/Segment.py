@@ -53,7 +53,9 @@ class Segment():
         aoi_data: A list of AOI_Stat objects for relevant "AOI"s for this Segment
         has_aois: A boolean indicating if this Segment has AOI features calculated for it
     """
-    def __init__(self, segid, all_data, fixation_data, saccade_data = None, event_data = None, aois = None, prune_length = None, rest_pupil_size = 0, export_pupilinfo = False):
+    def __init__(self, segid, all_data, fixation_data,
+                 saccade_data=None, event_data=None, aois=None, prune_length=None,
+                 rest_pupil_size=0, export_pupilinfo=False):
         """
         Args:
             segid: A string containing the id of the Segment.
@@ -195,8 +197,7 @@ class Segment():
         if self.sample_start_ind != None:
             return self.sample_start_ind, self.sample_end_ind, self.fixation_start_ind, \
                 self.fixation_end_ind, self.saccade_start_ind, self.saccade_end_ind, self.event_start_ind, self.event_end_ind
-        raise Exception ('The indices values are accessed before setting the initial value in segement:'+self.segid+'!')
-
+        raise Exception('The indices values are accessed before setting the initial value in segement:'+self.segid+'!')
 
     def set_aois(self, aois, all_data, fixation_data, event_data = None, rest_pupil_size = 0, export_pupilinfo = False):
         """Sets the relevant "AOI"s for this Segment
@@ -295,7 +296,6 @@ class Segment():
             self.features['blinktimedistancestd']   = stddev(blink_intervals)
             self.features['blinktimedistancemin']   = min(blink_intervals)
             self.features['blinktimedistancemax']   = max(blink_intervals)
-
 
     def calc_pupil_features(self, all_data, export_pupilinfo, rest_pupil_size):
         """ Calculates pupil features such as
@@ -406,7 +406,6 @@ class Segment():
             self.features['startdistance']      = -1
             self.features['enddistance']        = -1
 
-
     def calc_saccade_features(self, saccade_data):
         """ Calculates saccade features such as
                 numsaccades:              number of saccades in the segment
@@ -458,7 +457,6 @@ class Segment():
             self.features['maxsaccadespeed'] = -1
             self.features['minsaccadespeed'] = -1
             self.features['fixationsaccadetimeratio'] = -1
-
 
     def calc_fix_ang_path_features(self, fixation_data):
         """ Calculates fixation, angle and path features such as
@@ -526,7 +524,6 @@ class Segment():
             self.features['meanrelpathangles'] = -1
             self.features['stddevrelpathangles'] = -1
 
-
     def calc_event_features(self, event_data):
         """ Calculates event features such as
                 numevents:                number of events in the segment
@@ -577,7 +574,6 @@ class Segment():
             self.features['timetofirstdoubleclic'] = -1
             self.features['timetofirstkeypressed'] = -1
 
-
     def calc_validity_proportion(self, all_data):
         """Calculates the proportion of "Datapoint"s which are valid.
 
@@ -604,7 +600,6 @@ class Segment():
         else:
             return num_valid / num
 
-
     def calc_largest_validity_gap(self, all_data):
         """Calculates the largest gap of invalid samples in the "Datapoint"s for this Segment.
 
@@ -626,9 +621,9 @@ class Segment():
             while d.is_valid and (dindex < datalen - 1):
                 dindex += 1
                 d = all_data[dindex]
-            if not (d.is_valid):
+            if not d.is_valid:
                 gap_start = d.timestamp
-                while not (d.is_valid) and (dindex < datalen - 1):
+                while not d.is_valid and (dindex < datalen - 1):
                     dindex += 1
                     d = all_data[dindex]
                 if d.timestamp - gap_start > max_size:
@@ -637,7 +632,6 @@ class Segment():
                     self.time_gaps.append((gap_start, d.timestamp))
             dindex += 1
         return max_size
-
 
     def calc_blink_validity_gaps(self, all_data):
         """Calculates the blink validity gaps for this segment

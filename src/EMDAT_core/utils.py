@@ -213,7 +213,7 @@ def cast_int(string, invalid_value=None):
         the integer value of the string given or None if not an integer
     """
     try:
-        string_as_int = int(string)
+        string_as_int = int(float(string))
         if string_as_int == invalid_value:
             return None
     except ValueError:
